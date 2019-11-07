@@ -4,27 +4,36 @@ public class TicTacToeEvent extends EventObject{
 
 	private int x, y;
 	private boolean turn;
+	private String sTurn;
+	private Status status;
 	
-	public TicTacToeEvent(TicTacToeModel source, int x, int y, boolean turn) {
+	public TicTacToeEvent(TicTacToeModel source, int x, int y, String sTurn, Status status) {
 		super(source);
 		this.x = x;
 		this.y = y;
-		this.turn = turn;
+		this.status = status;
+		this.sTurn = sTurn;
 		
 	}
 	
-	private int getX() {
+	public Status getStatus() {
+		return status;
+	}
+	
+	public int getX() {
 		return x;
 	}
 
-	private int getY() {
+	public int getY() {
 		return y;
 	}
 	
-	private boolean getTurn() {
+	public boolean getTurn() {
 		return turn;
 	}
 	
-	
+	public String getSTurn() {
+		return sTurn;
+	}
 
 }

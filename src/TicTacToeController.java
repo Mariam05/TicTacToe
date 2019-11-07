@@ -1,6 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Actionlistener for buttons
+ * @author tomar
+ *
+ */
 public class TicTacToeController implements ActionListener {
 
 	private TicTacToeModel model;
@@ -15,7 +20,7 @@ public class TicTacToeController implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		model.play(i,  j);
 
 	}
 

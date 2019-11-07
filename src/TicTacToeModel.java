@@ -1,5 +1,13 @@
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple model for TicTacToe (ie. game logic)
+ * 
+ * 
+ * @author Mariam 
+ * @version 1.0
+ */
 public class TicTacToeModel {
 
 	public static final int SIZE = 3;
@@ -9,20 +17,27 @@ public class TicTacToeModel {
 
 	public TicTacToeModel() {
 		grid = new String[SIZE][SIZE];
+		tttmodels = new ArrayList<>();
 		turn = true;
 
 	}
 
 	public void play(int x, int y) {
 		grid[x][y] = turn ? "X" : "O";
-		String winner = checkWinner();
-		if (winner != null) {
-			System.out.println("Game over. Winner: " + winner);
+
+		Status status = checkWinner();
+		
+		if (status.compareTo(Status.IN_PROGRESS) !=0 ) {
+			//System.out.println("Game over. Winner: " + status);
 		}
-		TicTacToeEvent e = new TicTacToeEvent(this, x, y, turn);
+
+		TicTacToeEvent e = new TicTacToeEvent(this, x, y, grid[x][y], status);
+
 		for (TicTacToeListener tttl : tttmodels) {
 			tttl.handleTTTEvent(e);
 		}
+
+		turn = !turn;
 
 	}
 
@@ -30,7 +45,7 @@ public class TicTacToeModel {
 		tttmodels.add(tttl);
 	}
 
-	private String checkWinner() {
+	private Status checkWinner() {
 		for (int a = 0; a < 8; a++) {
 			String line = null;
 			switch (a) {
@@ -59,33 +74,30 @@ public class TicTacToeModel {
 				line = grid[0][2] + grid[1][1] + grid[2][0]; // diagonal top right to bottom left
 				break;
 			}
+
 			if (line.equals("XXX")) {
-				return "X";
+				return Status.X;
 			} else if (line.equals("OOO")) {
-				return "O";
+				return Status.O;
 			}
 		}
 
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				if (grid[i][j] == null)
-					break;
-			}
-			return "draw";
-		}
-		System.out.println(turn + "'s turn; enter a slot number to place " + turn + " in:");
-		return null;
+		return isDraw();
 	}
 
 	/**
-	 * Put numbers on the board's squares that the player can references.
+	 * A draw occurs if there are no more empty spaces in the grid 
+	 * and no winner
+	 * @return
 	 */
-	private void populateEmptyBoard() {
-		int a = 0;
+	private Status isDraw() {
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
-				grid[i][j] = String.valueOf(++a);
+				if (grid[i][j] == null)
+					return Status.IN_PROGRESS;
 			}
 		}
+		return Status.DRAW;
 	}
+
 }
